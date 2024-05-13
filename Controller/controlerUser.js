@@ -110,8 +110,7 @@ exports.getUserAuthenticated = async (req, res) => {
   }),
   // Create a new user
   (exports.createUser = async (req, res) => {
-    const { name, email, age, discordAccount, location, username, photo, bio } =
-      req.body;
+    const { name, email, photo } = req.body;
     const user = new User({
       name,
       email,

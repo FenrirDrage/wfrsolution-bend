@@ -2,7 +2,7 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
-const routes = require("./routes/routes"); // Import routes
+const routes = require("./Routes/routes"); // Import routes
 const utilities = require("./utilities/utilities"); // Import utilities
 const cors = require("cors");
 const app = express();
@@ -32,7 +32,7 @@ const auth = function (req, res, next) {
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb+srv://smoreiralves:sY85QIaLrTBBG3gl@wfrsolutions.npvdceq.mongodb.net/WFRsolution?retryWrites=true&w=majority"
+  "mongodb+srv://operatorsolution:3SBECEtUPAkyp3sE@wfrsolutions.npvdceq.mongodb.net/WFRsolution?retryWrites=true&w=majority"
 );
 
 // Use the routes
