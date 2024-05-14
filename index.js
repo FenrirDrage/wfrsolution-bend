@@ -15,8 +15,9 @@ app.use(
 
 //auth
 const auth = function (req, res, next) {
-  let exceptions = ["/login", "/register"];
-  if (exceptions.indexOf(req.url) >= 0) {
+  const exceptions = ["/login", "/register"];
+
+  if (exceptions.includes(req.url)) {
     next();
   } else {
     utilities.validateToken(req.headers.authorization, (result, username) => {
@@ -32,7 +33,7 @@ const auth = function (req, res, next) {
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb+srv://operatorsolution:3SBECEtUPAkyp3sE@wfrsolutions.npvdceq.mongodb.net/WFRsolution?retryWrites=true&w=majority"
+  "mongodb+srv://smoreiralves:tAu37ZFI7RBiHh1c@WFRSolutions.npvdceq.mongodb.net/"
 );
 
 // Use the routes
