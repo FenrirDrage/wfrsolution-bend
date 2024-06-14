@@ -15,6 +15,7 @@ router.post(
   "/register",
   [
     body("name").notEmpty().escape(),
+    body("username").notEmpty().escape(),
     body("email").notEmpty().escape(),
     body("password").notEmpty().escape(),
   ],

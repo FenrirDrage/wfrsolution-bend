@@ -7,14 +7,14 @@ const { validateToken } = require("../utilities/utilities.js");
 
 //user login
 exports.login = (req, res) => {
-  User.find({ email: req.body.email })
+  User.find({ email: req.body.username })
     .then((user) => {
       if (user.length > 0) {
         bcrypt
           .compare(req.body.password, user[0].password)
           .then(function (result) {
             if (result) {
-              utilities.generateToken({ user: req.body.email }, (token) => {
+              utilities.generateToken({ user: req.body.username }, (token) => {
                 res.status(200).json(token);
               });
             } else {
@@ -36,11 +36,14 @@ exports.register = (req, res) => {
     bcrypt.hash(req.body.password, salt, function (err, hash) {
       const userToCreate = new User({
         name: req.body.name,
+        username: req.body.username,
         email: req.body.email,
         password: hash,
       });
 
-      User.find({ email: req.body.email })
+      User.find({
+        $or: [{ email: req.body.email }, { username: req.body.username }],
+      })
         .then((user) => {
           if (user.length > 0) {
             res.status(406).send("Duplicated User");
@@ -110,9 +113,10 @@ exports.getUserAuthenticated = async (req, res) => {
   }),
   // Create a new user
   (exports.createUser = async (req, res) => {
-    const { name, email, photo } = req.body;
+    const { name, username, email, photo } = req.body;
     const user = new User({
       name,
+      username,
       email,
       password,
       usertype,
