@@ -82,7 +82,6 @@ const eventSchema = new mongoose.Schema(
       type: Array,
     },
     quantdd: {
-      require: true,
       type: Number,
     },
     obs: {
