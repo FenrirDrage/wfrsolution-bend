@@ -7,7 +7,7 @@ const { validateToken } = require("../utilities/utilities.js");
 
 //user login
 exports.login = (req, res) => {
-  User.find({ email: req.body.username })
+  User.find({ username: req.body.username })
     .then((user) => {
       if (user.length > 0) {
         bcrypt
