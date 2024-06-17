@@ -21,7 +21,7 @@ const validateToken = (token, callback) => {
   }
   jwt.verify(token.replace("Bearer ", ""), secret, function (error, decoded) {
     let loggedUser = decoded.data.user;
-    User.findOne({ email: loggedUser }).then((user) => {
+    User.findOne({ username: loggedUser }).then((user) => {
       if (user) {
         return callback(true, loggedUser);
       } else {

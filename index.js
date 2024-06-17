@@ -33,13 +33,13 @@ const auth = function (req, res, next) {
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb+srv://smoreiralves:tAu37ZFI7RBiHh1c@WFRSolutions.npvdceq.mongodb.net/"
+  "mongodb+srv://operatorsolution:v4fh6C0jrPJNbGAm@WFRSolutions.npvdceq.mongodb.net/"
 );
 
 // Use the routes
 app.use(express.json());
 app.use("/", auth, routes);
 
-app.listen(5500, () => {
-  console.log("Server started on port 5500");
+app.listen(16082, () => {
+  console.log("Server started on port 16082");
 });
