@@ -40,6 +40,6 @@ mongoose.connect(
 app.use(express.json());
 app.use("/", auth, routes);
 
-app.listen(16082, () => {
+app.listen(5500, () => {
   console.log("Server started on port 16082");
 });
