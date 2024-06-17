@@ -68,9 +68,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// Rota para obter informações do user autenticado
-const validateToken = require('./validateToken'); // Adjust the path to your token validation function
-
 // Route to get authenticated user information
 exports.getUserAuthenticated = async (req, res) => {
     const token = req.headers.authorization;
