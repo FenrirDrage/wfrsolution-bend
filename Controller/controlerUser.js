@@ -41,9 +41,7 @@ exports.register = (req, res) => {
         password: hash,
       });
 
-      User.find({
-        $or: [{ email: req.body.email }, { username: req.body.username }],
-      })
+      User.find({ email: req.body.email })
         .then((user) => {
           if (user.length > 0) {
             res.status(406).send("Duplicated User");
@@ -69,13 +67,13 @@ exports.register = (req, res) => {
 exports.getUserAuthenticated = async (req, res) => {
   const token = req.headers.authorization;
 
-  validateToken(token, async (isValid, userEmail) => {
+  validateToken(token, async (isValid, userUsername) => {
     if (!isValid) {
       return res.status(401).json({ message: "Invalid token" });
     }
 
     try {
-      const user = await User.findOne({ email: userEmail });
+      const user = await User.findOne({ username: userUsername });
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
