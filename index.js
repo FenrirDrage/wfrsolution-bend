@@ -41,5 +41,5 @@ app.use(express.json());
 app.use("/", auth, routes);
 
 app.listen(5500, () => {
-  console.log("Server started on port 16082");
+  console.log("Server started on port 5500");
 });

@@ -41,7 +41,7 @@ exports.register = (req, res) => {
         password: hash,
       });
 
-      User.find({ email: req.body.email })
+      User.find({ username: req.body.username })
         .then((user) => {
           if (user.length > 0) {
             res.status(406).send("Duplicated User");
@@ -134,11 +134,11 @@ exports.getUserAuthenticated = async (req, res) => {
 
     try {
       const old_info = await User.findOne({
-        email: req.loggedInUser,
+        username: req.loggedInUser,
       });
 
       const updatedUser = await User.findOneAndUpdate(
-        { email: req.loggedInUser },
+        { username: req.loggedInUser },
         {
           name: updates.name ? updates.name : old_info.name,
           photo: updates.photo ? updates.photo : old_info.photo,

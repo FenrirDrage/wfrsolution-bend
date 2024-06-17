@@ -31,8 +31,8 @@ router.post(
 
 // Route to add a new user
 router.post("/users", async (req, res) => {
-  const { name, email, photo } = req.body;
-  const user = new User({ name, email, photo });
+  const { name,username, email, photo } = req.body;
+  const user = new User({ name, username, email, photo });
 
   try {
     const newUser = await user.save();
