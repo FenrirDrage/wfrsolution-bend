@@ -7,84 +7,94 @@ const { validateToken } = require("../utilities/utilities.js");
 
 //user login
 exports.login = (req, res) => {
-  User.find({ username: req.body.username })
-    .then((user) => {
-      if (user.length > 0) {
-        bcrypt
-          .compare(req.body.password, user[0].password)
-          .then(function (result) {
-            if (result) {
-              utilities.generateToken({ user: req.body.username }, (token) => {
-                res.status(200).json(token);
+  const { username, password } = req.body;
+
+  User.findOne({ username: username })
+      .then(user => {
+          if (!user) {
+              return res.status(401).json({ message: "Not Authorized" });
+          }
+
+          bcrypt.compare(password, user.password)
+              .then(result => {
+                  if (result) {
+                      utilities.generateToken({ user: username }, (token) => {
+                          res.status(200).json({ token });
+                      });
+                  } else {
+                      res.status(401).json({ message: "Not Authorized" });
+                  }
+              })
+              .catch(err => {
+                  console.error("Error comparing passwords:", err);
+                  res.status(500).json({ message: "Internal Server Error" });
               });
-            } else {
-              res.status(401).send("Not Authorized");
-            }
-          });
-      } else {
-        res.status(401).send("Not Authorized");
-      }
-    })
-    .catch((err) => {
-      res.status(401).send("Not Authorized");
-    });
+      })
+      .catch(err => {
+          console.error("Error finding user:", err);
+          res.status(500).json({ message: "Internal Server Error" });
+      });
 };
 
 //user register
-exports.register = (req, res) => {
-  bcrypt.genSalt(10, function (err, salt) {
-    bcrypt.hash(req.body.password, salt, function (err, hash) {
+exports.register = async (req, res) => {
+  try {
+      const { name, username, email, password } = req.body;
+
+      // Check if the user already exists
+      const existingUser = await User.findOne({ username: username });
+      if (existingUser) {
+          return res.status(406).json({ message: "Duplicated User" });
+      }
+
+      // Hash the password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      // Create a new user
       const userToCreate = new User({
-        name: req.body.name,
-        username: req.body.username,
-        email: req.body.email,
-        password: hash,
+          name,
+          username,
+          email,
+          password: hashedPassword,
       });
 
-      User.find({ username: req.body.username })
-        .then((user) => {
-          if (user.length > 0) {
-            res.status(406).send("Duplicated User");
-          } else {
-            userToCreate
-              .save()
-              .then(() => {
-                res.status(200).send("Registered User");
-              })
-              .catch((err) => {
-                res.status(400).send(err);
-              });
-          }
-        })
-        .catch((err) => {
-          res.status(400).send(err);
-        });
-    });
-  });
+      // Save the user to the database
+      await userToCreate.save();
+      res.status(200).json({ message: "Registered User" });
+  } catch (err) {
+      console.error("Error registering user:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 // Rota para obter informações do user autenticado
+const validateToken = require('./validateToken'); // Adjust the path to your token validation function
+
+// Route to get authenticated user information
 exports.getUserAuthenticated = async (req, res) => {
-  const token = req.headers.authorization;
+    const token = req.headers.authorization;
 
-  validateToken(token, async (isValid, userUsername) => {
-    if (!isValid) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
+    validateToken(token, async (isValid, userUsername) => {
+        if (!isValid) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
 
-    try {
-      const user = await User.findOne({ username: userUsername });
+        try {
+            const user = await User.findOne({ username: userUsername });
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
 
-      res.json(user);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  });
+            res.json(user);
+        } catch (err) {
+            console.error("Error retrieving user:", err);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    });
 };
+
 
 // Get all users
 (exports.getAllUsers = async (req, res) => {
