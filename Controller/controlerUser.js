@@ -22,7 +22,7 @@ exports.login = (req, res) => {
                           res.status(200).json({ token });
                       });
                   } else {
-                      res.status(401).json({ message: "Not Authorized" });
+                      res.status(401).json({ message: "lol nope" });
                   }
               })
               .catch(err => {
@@ -42,7 +42,7 @@ exports.register = async (req, res) => {
       const { name, username, email, password } = req.body;
 
       // Check if the user already exists
-      const existingUser = await User.findOne({ username: username });
+      const existingUser = await User.findOne({ email: email });
       if (existingUser) {
           return res.status(406).json({ message: "Duplicated User" });
       }
@@ -61,7 +61,7 @@ exports.register = async (req, res) => {
 
       // Save the user to the database
       await userToCreate.save();
-      res.status(200).json({ message: "Registered User" });
+      res.status(200).json({ message: "Registered User", hashedPassword: hashedPassword });
   } catch (err) {
       console.error("Error registering user:", err);
       res.status(500).json({ message: "Internal Server Error" });

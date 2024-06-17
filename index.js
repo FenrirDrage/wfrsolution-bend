@@ -33,7 +33,7 @@ const auth = function (req, res, next) {
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb+srv://operatorsolution:v4fh6C0jrPJNbGAm@WFRSolutions.npvdceq.mongodb.net/"
+  "mongodb+srv://operatorsolution:WFR2024.@WFRSolutions.npvdceq.mongodb.net/"
 );
 
 // Use the routes
