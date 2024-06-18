@@ -10,88 +10,90 @@ exports.login = (req, res) => {
   const { username, password } = req.body;
 
   User.findOne({ username: username })
-      .then(user => {
-          if (!user) {
-              return res.status(401).json({ message: "Not Authorized" });
-          }
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "Not Authorized" });
+      }
 
-          bcrypt.compare(password, user.password)
-              .then(result => {
-                  if (result) {
-                      utilities.generateToken({ user: username }, (token) => {
-                          res.status(200).json({ token });
-                      });
-                  } else {
-                      res.status(401).json({ message: "lol nope" });
-                  }
-              })
-              .catch(err => {
-                  console.error("Error comparing passwords:", err);
-                  res.status(500).json({ message: "Internal Server Error" });
-              });
-      })
-      .catch(err => {
-          console.error("Error finding user:", err);
+      bcrypt
+        .compare(password, user.password)
+        .then((result) => {
+          if (result) {
+            utilities.generateToken({ user: username }, (token) => {
+              res.status(200).json({ token });
+            });
+          } else {
+            res.status(401).json({ message: "lol nope" });
+          }
+        })
+        .catch((err) => {
+          console.error("Error comparing passwords:", err);
           res.status(500).json({ message: "Internal Server Error" });
-      });
+        });
+    })
+    .catch((err) => {
+      console.error("Error finding user:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+    });
 };
 
 //user register
 exports.register = async (req, res) => {
   try {
-      const { name, username, email, password } = req.body;
+    const { name, username, email, password } = req.body;
 
-      // Check if the user already exists
-      const existingUser = await User.findOne({ email: email });
-      if (existingUser) {
-          return res.status(406).json({ message: "Duplicated User" });
-      }
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      return res.status(406).json({ message: "Duplicated User" });
+    }
 
-      // Hash the password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-      // Create a new user
-      const userToCreate = new User({
-          name,
-          username,
-          email,
-          password: hashedPassword,
-      });
+    // Create a new user
+    const userToCreate = new User({
+      name,
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-      // Save the user to the database
-      await userToCreate.save();
-      res.status(200).json({ message: "Registered User", hashedPassword: hashedPassword });
+    // Save the user to the database
+    await userToCreate.save();
+    res
+      .status(200)
+      .json({ message: "Registered User", hashedPassword: hashedPassword });
   } catch (err) {
-      console.error("Error registering user:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error registering user:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 // Route to get authenticated user information
 exports.getUserAuthenticated = async (req, res) => {
-    const token = req.headers.authorization;
+  const token = req.headers.authorization;
 
-    validateToken(token, async (isValid, userUsername) => {
-        if (!isValid) {
-            return res.status(401).json({ message: "Invalid token" });
-        }
+  validateToken(token, async (isValid, userUsername) => {
+    if (!isValid) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
 
-        try {
-            const user = await User.findOne({ username: userUsername });
+    try {
+      const user = await User.findOne({ username: userUsername });
 
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-            res.json(user);
-        } catch (err) {
-            console.error("Error retrieving user:", err);
-            res.status(500).json({ message: "Internal Server Error" });
-        }
-    });
+      res.json(user);
+    } catch (err) {
+      console.error("Error retrieving user:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
 };
-
 
 // Get all users
 (exports.getAllUsers = async (req, res) => {
@@ -118,14 +120,14 @@ exports.getUserAuthenticated = async (req, res) => {
   }),
   // Create a new user
   (exports.createUser = async (req, res) => {
-    const { name, username, email, photo } = req.body;
+    const { name, username, email, image_data } = req.body;
     const user = new User({
       name,
       username,
       email,
       password,
       usertype,
-      photo,
+      image_data,
     });
 
     try {

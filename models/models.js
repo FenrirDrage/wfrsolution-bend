@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
     },
-    photo: {
+    image_data: {
       type: String,
     },
     // Add other fields as needed
@@ -75,13 +75,13 @@ const eventSchema = new mongoose.Schema(
     },
     operator: {
       require: true,
-      type: Array,
+      type: [String],
     },
     material: {
       require: true,
-      type: Array,
+      type: [String],
     },
-    quantdd: {
+    image_data: {
       type: Number,
     },
     obs: {
