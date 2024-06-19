@@ -40,17 +40,8 @@ const { Event } = require("../models/models");
 
 // Create a new event
 exports.createEvent = async (req, res) => {
-  const {
-    name,
-    date,
-    hour_b,
-    hour_e,
-    local,
-    operator,
-    material,
-    image_data,
-    obs,
-  } = req.body;
+  const { name, date, hour_b, hour_e, local, operator, material, image, obs } =
+    req.body;
 
   try {
     // Check if an event with the same name already exists
@@ -71,7 +62,7 @@ exports.createEvent = async (req, res) => {
       local,
       operator,
       material,
-      image_data,
+      image,
       obs,
     });
 

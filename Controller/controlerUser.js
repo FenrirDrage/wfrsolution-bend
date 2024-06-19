@@ -120,14 +120,14 @@ exports.getUserAuthenticated = async (req, res) => {
   }),
   // Create a new user
   (exports.createUser = async (req, res) => {
-    const { name, username, email, image_data } = req.body;
+    const { name, username, email, image } = req.body;
     const user = new User({
       name,
       username,
       email,
       password,
       usertype,
-      image_data,
+      image,
     });
 
     try {

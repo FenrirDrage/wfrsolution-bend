@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
     },
-    image_data: {
+    image: {
       type: String,
     },
     // Add other fields as needed
@@ -81,7 +81,7 @@ const eventSchema = new mongoose.Schema(
       require: true,
       type: Array,
     },
-    image_data: {
+    image: {
       type: Number,
     },
     obs: {
