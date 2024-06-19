@@ -75,11 +75,11 @@ const eventSchema = new mongoose.Schema(
     },
     operator: {
       require: true,
-      type: [String],
+      type: Array,
     },
     material: {
       require: true,
-      type: [String],
+      type: Array,
     },
     image_data: {
       type: Number,
