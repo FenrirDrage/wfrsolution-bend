@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { User, Event, Clients } = require("../models/models"); // Import your models
-const EventController = require("../Controller/controlerEvent"); // Import controller
-const UserController = require("../Controller/controlerUser"); // Import controller //Import controller
+const EventController = require("../Controller/controlerEvent"); // Import controller events
+const UserController = require("../Controller/controlerUser"); // Import controller users
+const ClientController = require("../Controller/controlerClients"); // Import controller clients
 const { validationResult, body } = require("express-validator");
+const { request } = require("http");
 
 //route to login
 router.post("/login", function (req, res) {

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { type } = require("os");
 
 // Define a schema for users
 const userSchema = new mongoose.Schema(
