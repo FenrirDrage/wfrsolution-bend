@@ -2,11 +2,31 @@ const { Clients } = require("../models/models");
 
 // Função para criar um novo cliente
 exports.createClient = async (req, res) => {
+  const { name, cAdress, email, telf, nif } = req.body;
+
   try {
-    const client = await Clients.create(req.body);
-    res.status(201).json({ success: true, data: client });
+    // Verificar se já existe um cliente com o mesmo nome
+    const existingClient = await Clients.findOne({ name });
+
+    if (existingClient) {
+      return res
+        .status(400)
+        .json({ message: "Client with the same name already exists" });
+    }
+
+    // Se nenhum cliente correspondente for encontrado, criar um novo
+    const newClient = new Clients({
+      name,
+      cAdress,
+      email,
+      telf,
+      nif,
+    });
+
+    const createdClient = await newClient.save();
+    res.status(201).json({ success: true, data: createdClient });
   } catch (err) {
-    res.status(400).json({ success: false, error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
