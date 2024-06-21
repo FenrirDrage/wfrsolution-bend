@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Event } = require("../models/models"); // Import your models
+const { User, Event, Clients } = require("../models/models"); // Import your models
 const EventController = require("../Controller/controlerEvent"); // Import controller
 const UserController = require("../Controller/controlerUser"); // Import controller //Import controller
 const { validationResult, body } = require("express-validator");
@@ -31,7 +31,7 @@ router.post(
 
 // Route to add a new user
 router.post("/users", async (req, res) => {
-  const { name,username, email, photo } = req.body;
+  const { name, username, email, photo } = req.body;
   const user = new User({ name, username, email, photo });
 
   try {
@@ -60,5 +60,12 @@ router.post("/events", EventController.createEvent);
 router.put("/events/:id", EventController.updateEvent);
 router.delete("/events/id/:id", EventController.deleteEvent); // Adjusted path
 router.delete("/events/name/:name", EventController.deleteEventByName); // Adjusted path
+
+// Rotas CRUD para clientes
+router.post("/clients", ClientController.createClient);
+router.get("/clients", ClientController.getClients);
+router.get("/clients/:id", ClientController.getClientById);
+router.put("/clients/:id", ClientController.updateClient);
+router.delete("/clients/:id", ClientController.deleteClient);
 
 module.exports = router;
