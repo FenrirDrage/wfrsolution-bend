@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 
 // Define a schema for users
 const userSchema = new mongoose.Schema(
@@ -130,8 +131,27 @@ const clientsSchema = new mongoose.Schema(
 
 const Clients = mongoose.model("Clients", clientsSchema);
 
+//Define a schema for image
+const imageSchema = new mongoose.Schema({
+  filename:{
+    type: String,
+    require: true,
+  },
+  contentType:{
+    type: String,
+    require: true,
+  },
+  imageBuffer:{
+    type: Buffer,
+    require: true,
+  }
+});
+
+const Image = mongoose.model("Image", imageSchema);
+
 module.exports = {
   User,
   Event,
   Clients,
+  Image
 };
