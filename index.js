@@ -6,6 +6,10 @@ const routes = require("./Routes/routes"); // Import routes
 const utilities = require("./utilities/utilities"); // Import utilities
 const cors = require("cors");
 const app = express();
+require ('dotenv').config();
+
+const mongodb = process.env.MONGO_URI;
+const port = process.env.PORT || 5000;
 
 app.use(
   cors({
@@ -32,14 +36,12 @@ const auth = function (req, res, next) {
 };
 
 // Connect to MongoDB
-mongoose.connect(
-  "mongodb+srv://operatorsolution:WFR2024.@WFRSolutions.npvdceq.mongodb.net/"
-);
+mongoose.connect(mongodb);
 
 // Use the routes
 app.use(express.json());
 app.use("/", auth, routes);
 
-app.listen(5500, () => {
-  console.log("Server started on port 5500");
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });

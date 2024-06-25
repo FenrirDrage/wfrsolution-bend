@@ -1,8 +1,9 @@
 
 var jwt = require("jsonwebtoken");
 const { User } = require("../models/models");
+require = require("dotenv").config;
 
-let secret = "7a+RK(&o8gJJzR^uX,39GJ!VG&s";
+let secret = process.env.JWT_SECREET;
 
 const generateToken = (user_info, callback) => {
   let token = jwt.sign(
