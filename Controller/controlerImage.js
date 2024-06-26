@@ -95,10 +95,10 @@ exports.deleteImage = expressHandler(async (req, res) => {
   }
 });
 
-// Middleware para obter todas as imagens
+// Middleware to get all images
 exports.getAllImages = expressHandler(async (req, res) => {
   try {
-    const images = await Image.find({});
+    const images = await Image.find({}, "_id filename contentType");
     res.status(200).json(images);
   } catch (err) {
     res.status(500).json({
