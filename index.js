@@ -1,5 +1,3 @@
-//mongodb+srv://smoreiralves:sY85QIaLrTBBG3gl@wfrsolutions.npvdceq.mongodb.net/
-
 const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./Routes/routes"); // Import routes
