@@ -1,6 +1,6 @@
 var jwt = require("jsonwebtoken");
 const { User } = require("../models/models");
-require = require("dotenv").config;
+require("dotenv").config;
 
 let secret = process.env.JWT_SECRET;
 
@@ -19,6 +19,7 @@ const validateToken = (token, callback) => {
   if (!token) {
     return callback(false, null);
   }
+
   jwt.verify(token.replace("Bearer ", ""), secret, function (error, decoded) {
     let loggedUser = decoded.data.user;
     User.findOne({ username: loggedUser })

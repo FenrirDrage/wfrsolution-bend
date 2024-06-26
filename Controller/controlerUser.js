@@ -20,7 +20,7 @@ exports.login = (req, res) => {
         .then((result) => {
           if (result) {
             utilities.generateToken({ user: username }, (token) => {
-              res.status(200).json({ token });
+              res.status(200).json({ username, token });
             });
           } else {
             res.status(401).json({ message: "lol nope" });
