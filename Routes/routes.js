@@ -6,8 +6,8 @@ const UserController = require("../Controller/controlerUser"); // Import control
 const ClientController = require("../Controller/controlerClients"); // Import controller clients
 const { validationResult, body } = require("express-validator");
 const { request } = require("http");
-const { uploadImage,getAllImages, readImage, deleteImage } = require("../Controller/controlerImage");
-const {upload} = require('../utilities/upload')
+const ImageController = require("../Controller/controlerImage");
+const { upload } = require("../utilities/upload");
 
 //route to login
 router.post("/login", function (req, res) {
@@ -72,13 +72,13 @@ router.get("/clients/:id", ClientController.getClientById);
 router.put("/clients/:id", ClientController.updateClient);
 router.delete("/clients/:id", ClientController.deleteClient);
 
-// Rota para upload de imagens
-router.post("/upload", uploadImage);
-// Rota para obter todas as imagens
-router.get("/images", getAllImages);
-// Rota para ler uma imagem
-router.get("/image/:id", readImage);
-// Rota para deletar uma imagem
-router.delete("/image/:id", deleteImage);
+// Rota CRUD para Imagens
+// Rota para upload de uma única imagem
+router.post("/uploadSingle", ImageController.uploadSingleImage);
+// Rota para upload de múltiplas imagens
+router.post("/uploadMultiple", ImageController.uploadImages);
+router.get("/images", ImageController.getAllImages);
+router.get("/image/:id", ImageController.readImage);
+router.delete("/image/:id", ImageController.deleteImage);
 
 module.exports = router;
