@@ -3,11 +3,9 @@ const multer = require("multer");
 const { Image } = require("../models/models");
 //const { upload } = require("../utilities/upload");
 
-// Configure multer for file handling
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Middleware to handle single image upload
 exports.uploadSingleImage = expressHandler(async (req, res) => {
   upload.single("image")(req, res, async (err) => {
     if (err) {
@@ -16,13 +14,19 @@ exports.uploadSingleImage = expressHandler(async (req, res) => {
         .json({ message: "Erro ao fazer upload da imagem", error: err });
     }
 
+    if (!req.file) {
+      return res.status(400).json({ message: "Nenhum arquivo enviado" });
+    }
+
     try {
       const newImage = new Image({
         filename: req.file.originalname,
         contentType: req.file.mimetype,
         imageBuffer: req.file.buffer,
       });
+
       const savedImage = await newImage.save();
+
       res.status(201).json({
         message: "Imagem enviada com sucesso",
         image: {
@@ -40,13 +44,16 @@ exports.uploadSingleImage = expressHandler(async (req, res) => {
   });
 });
 
-// Middleware to handle multiple images upload
 exports.uploadImages = expressHandler(async (req, res) => {
   upload.array("images")(req, res, async (err) => {
     if (err) {
       return res
         .status(400)
         .json({ message: "Erro ao fazer upload das imagens", error: err });
+    }
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "Nenhuma imagem enviada" });
     }
 
     try {
@@ -81,7 +88,14 @@ exports.uploadImages = expressHandler(async (req, res) => {
 // Middleware para ler uma imagem
 exports.readImage = expressHandler(async (req, res) => {
   try {
-    const image = await Image.findById(req.params.id);
+    const { id } = req.params;
+
+    // Verificação básica do formato do ID
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "ID de imagem inválido" });
+    }
+
+    const image = await Image.findById(id);
     if (!image) {
       return res.status(404).json({ message: "Imagem não encontrada" });
     }
