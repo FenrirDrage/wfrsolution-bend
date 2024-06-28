@@ -1,6 +1,4 @@
-const { update } = require("moongose/models/user_model.js");
-const { User } = require("../models/models.js"); // Import your User model
-const { events } = require("../models/models.js");
+const { User } = require("../models/users.js"); // Import your User model
 const utilities = require("../utilities/utilities.js");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../utilities/utilities.js");

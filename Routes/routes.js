@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { User } = require("../models/models"); // Import your models
+const { User } = require("../models/users"); // Import your models
 const EventController = require("../Controller/controlerEvent"); // Import controller events
 const UserController = require("../Controller/controlerUser"); // Import controller users
 const ClientController = require("../Controller/controlerClients"); // Import controller clients
 const { validationResult, body } = require("express-validator");
 const { request } = require("http");
 const ImageController = require("../Controller/controlerImage");
-const { upload } = require("../utilities/upload");
 
 //route to login
 router.post("/login", function (req, res) {

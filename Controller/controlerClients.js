@@ -1,4 +1,4 @@
-const { Clients } = require("../models/models");
+const { Clients } = require("../models/clients");
 
 // Função para criar um novo cliente
 exports.createClient = async (req, res) => {

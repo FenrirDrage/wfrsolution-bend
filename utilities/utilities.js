@@ -1,5 +1,5 @@
 var jwt = require("jsonwebtoken");
-const { User } = require("../models/models");
+const { User } = require("../models/users");
 require("dotenv").config;
 
 let secret = "7a+RK(&o8gJJzR^uX,39GJ!VG&s";
