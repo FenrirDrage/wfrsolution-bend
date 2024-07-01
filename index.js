@@ -34,7 +34,7 @@ const auth = function (req, res, next) {
 };
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(mongodb);
 
 // Use the routes
 app.use(express.json());
