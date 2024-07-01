@@ -1,4 +1,5 @@
 const { Event } = require("../models/events");
+const { User } = require("../models/users");
 
 (exports.getAllEvents = async (req, res) => {
   console.log(req.loggedInUser);
@@ -67,6 +68,31 @@ exports.createEvent = async (req, res) => {
     });
 
     const newEvent = await event.save();
+
+    // Find users associated with this event
+    const users = await User.find({ _id: { $in: userIds } });
+
+    // Update users to include this event
+    await User.updateMany(
+      { _id: { $in: userIds } },
+      { $addToSet: { events: newEvent._id } }
+    );
+
+    // Prepare notification payload
+    const payload = {
+      notification: {
+        title: "New Event",
+        body: `A new event "${name}" has been created.`,
+      },
+    };
+
+    // Send notifications to users
+    users.forEach(async (user) => {
+      if (user.pushToken) {
+        await admin.messaging().sendToDevice(user.pushToken, payload);
+      }
+    });
+
     res.status(201).json(newEvent);
   } catch (err) {
     res.status(500).json({ message: err.message });

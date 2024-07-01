@@ -42,6 +42,15 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    pushToken: {
+      type: String,
+    },
+    events: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ], // Field to store subscribed events
     // Add other fields as needed
   },
   { collection: "Users" }

@@ -4,9 +4,10 @@ const { User } = require("../models/users"); // Import your models
 const EventController = require("../Controller/controlerEvent"); // Import controller events
 const UserController = require("../Controller/controlerUser"); // Import controller users
 const ClientController = require("../Controller/controlerClients"); // Import controller clients
-const { validationResult, body } = require("express-validator");
-const { request } = require("http");
 const ImageController = require("../Controller/controlerImage");
+const { validationResult, body } = require("express-validator");
+const { sendNotification } = require("../Controller/controlerpush");
+const { request } = require("http");
 
 //route to login
 router.post("/login", function (req, res) {
@@ -44,6 +45,9 @@ router.post("/users", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+// Route for send-not
+router.post("/send-notification", sendNotification);
 
 // Routes for users
 router.get("/users/authenticated", UserController.getUserAuthenticated);
